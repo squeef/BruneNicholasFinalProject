@@ -236,6 +236,304 @@ class MenuPage(tk.Frame):
         time_label.pack(side='right')
 
         tick()
+class WithdrawPage(tk.Frame):
+    
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent,bg='#3d3d5c')
+        self.controller = controller
 
+
+        heading_label = tk.Label(self,
+                                                     text='SECURITEX ATM',
+                                                     font=('orbitron',45,'bold'),
+                                                     foreground='#ffffff',
+                                                     background='#3d3d5c')
+        heading_label.pack(pady=25)
+
+        choose_amount_label = tk.Label(self,
+                                                           text='Choose the amount you want to withdraw',
+                                                           font=('orbitron',13),
+                                                           fg='white',
+                                                           bg='#3d3d5c')
+        choose_amount_label.pack()
+
+        button_frame = tk.Frame(self,bg='#33334d')
+        button_frame.pack(fill='both',expand=True)
+
+        def withdraw(amount):
+            global current_balance
+            current_balance -= amount
+            controller.shared_data['Balance'].set(current_balance)
+            controller.show_frame('MenuPage')
+            
+        twenty_button = tk.Button(button_frame,
+                                                       text='20',
+                                                       command=lambda:withdraw(20),
+                                                       relief='raised',
+                                                       borderwidth=3,
+                                                       width=50,
+                                                       height=5)
+        twenty_button.grid(row=0,column=0,pady=5)
+
+        forty_button = tk.Button(button_frame,
+                                                       text='40',
+                                                       command=lambda:withdraw(40),
+                                                       relief='raised',
+                                                       borderwidth=3,
+                                                       width=50,
+                                                       height=5)
+        forty_button.grid(row=1,column=0,pady=5)
+
+        sixty_button = tk.Button(button_frame,
+                                                       text='60',
+                                                       command=lambda:withdraw(60),
+                                                       relief='raised',
+                                                       borderwidth=3,
+                                                       width=50,
+                                                       height=5)
+        sixty_button.grid(row=2,column=0,pady=5)
+
+        eighty_button = tk.Button(button_frame,
+                                                       text='80',
+                                                       command=lambda:withdraw(80),
+                                                       relief='raised',
+                                                       borderwidth=3,
+                                                       width=50,
+                                                       height=5)
+        eighty_button.grid(row=3,column=0,pady=5)
+
+        one_hundred_button = tk.Button(button_frame,
+                                                       text='100',
+                                                       command=lambda:withdraw(100),
+                                                       relief='raised',
+                                                       borderwidth=3,
+                                                       width=50,
+                                                       height=5)
+        one_hundred_button.grid(row=0,column=1,pady=5,padx=555)
+
+        two_hundred_button = tk.Button(button_frame,
+                                                       text='200',
+                                                       command=lambda:withdraw(200),
+                                                       relief='raised',
+                                                       borderwidth=3,
+                                                       width=50,
+                                                       height=5)
+        two_hundred_button.grid(row=1,column=1,pady=5)
+
+        three_hundred_button = tk.Button(button_frame,
+                                                       text='300',
+                                                       command=lambda:withdraw(300),
+                                                       relief='raised',
+                                                       borderwidth=3,
+                                                       width=50,
+                                                       height=5)
+        three_hundred_button.grid(row=2,column=1,pady=5)
+
+        cash = tk.StringVar()
+        other_amount_entry = tk.Entry(button_frame,
+                                                              textvariable=cash,
+                                                              width=59,
+                                                              justify='right')
+        other_amount_entry.grid(row=3,column=1,pady=5,ipady=30)
+
+        def other_amount(_):
+            global current_balance
+            current_balance -= int(cash.get())
+            controller.shared_data['Balance'].set(current_balance)
+            cash.set('')
+            controller.show_frame('MenuPage')
+            
+        other_amount_entry.bind('<Return>',other_amount)
+
+        bottom_frame = tk.Frame(self,relief='raised',borderwidth=3)
+        bottom_frame.pack(fill='x',side='bottom')
+
+        visa_photo = tk.PhotoImage(file='visa.png')
+        visa_label = tk.Label(bottom_frame,image=visa_photo)
+        visa_label.pack(side='left')
+        visa_label.image = visa_photo
+
+        mastercard_photo = tk.PhotoImage(file='mastercard.png')
+        mastercard_label = tk.Label(bottom_frame,image=mastercard_photo)
+        mastercard_label.pack(side='left')
+        mastercard_label.image = mastercard_photo
+
+        american_express_photo = tk.PhotoImage(file='american-express.png')
+        american_express_label = tk.Label(bottom_frame,image=american_express_photo)
+        american_express_label.pack(side='left')
+        american_express_label.image = american_express_photo
+
+        def tick():
+            current_time = time.strftime('%I:%M %p').lstrip('0').replace(' 0',' ')
+            time_label.config(text=current_time)
+            time_label.after(200,tick)
+            
+        time_label = tk.Label(bottom_frame,font=('orbitron',12))
+        time_label.pack(side='right')
+
+        tick()
+   
+
+class DepositPage(tk.Frame):
+    
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent,bg='#3d3d5c')
+        self.controller = controller
+
+        heading_label = tk.Label(self,
+                                                     text='SECURITEX ATM',
+                                                     font=('orbitron',45,'bold'),
+                                                     foreground='#ffffff',
+                                                     background='#3d3d5c')
+        heading_label.pack(pady=25)
+
+        space_label = tk.Label(self,height=4,bg='#3d3d5c')
+        space_label.pack()
+
+        enter_amount_label = tk.Label(self,
+                                                      text='Enter amount',
+                                                      font=('orbitron',13),
+                                                      bg='#3d3d5c',
+                                                      fg='white')
+        enter_amount_label.pack(pady=10)
+
+        cash = tk.StringVar()
+        deposit_entry = tk.Entry(self,
+                                                  textvariable=cash,
+                                                  font=('orbitron',12),
+                                                  width=22)
+        deposit_entry.pack(ipady=7)
+
+        def deposit_cash():
+            global current_balance
+            current_balance += int(cash.get())
+            controller.shared_data['Balance'].set(current_balance)
+            controller.show_frame('MenuPage')
+            cash.set('')
+            
+        enter_button = tk.Button(self,
+                                                     text='Enter',
+                                                     command=deposit_cash,
+                                                     relief='raised',
+                                                     borderwidth=3,
+                                                     width=40,
+                                                     height=3)
+        enter_button.pack(pady=10)
+
+        two_tone_label = tk.Label(self,bg='#33334d')
+        two_tone_label.pack(fill='both',expand=True)
+
+        bottom_frame = tk.Frame(self,relief='raised',borderwidth=3)
+        bottom_frame.pack(fill='x',side='bottom')
+
+        visa_photo = tk.PhotoImage(file='visa.png')
+        visa_label = tk.Label(bottom_frame,image=visa_photo)
+        visa_label.pack(side='left')
+        visa_label.image = visa_photo
+
+        mastercard_photo = tk.PhotoImage(file='mastercard.png')
+        mastercard_label = tk.Label(bottom_frame,image=mastercard_photo)
+        mastercard_label.pack(side='left')
+        mastercard_label.image = mastercard_photo
+
+        american_express_photo = tk.PhotoImage(file='american-express.png')
+        american_express_label = tk.Label(bottom_frame,image=american_express_photo)
+        american_express_label.pack(side='left')
+        american_express_label.image = american_express_photo
+
+        def tick():
+            current_time = time.strftime('%I:%M %p').lstrip('0').replace(' 0',' ')
+            time_label.config(text=current_time)
+            time_label.after(200,tick)
+            
+        time_label = tk.Label(bottom_frame,font=('orbitron',12))
+        time_label.pack(side='right')
+
+        tick()
+
+
+class BalancePage(tk.Frame):
+    
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent,bg='#3d3d5c')
+        self.controller = controller
+
+        
+        heading_label = tk.Label(self,
+                                                     text='SECURITEX ATM',
+                                                     font=('orbitron',45,'bold'),
+                                                     foreground='#ffffff',
+                                                     background='#3d3d5c')
+        heading_label.pack(pady=25)
+
+        global current_balance
+        controller.shared_data['Balance'].set(current_balance)
+        balance_label = tk.Label(self,
+                                                  textvariable=controller.shared_data['Balance'],
+                                                  font=('orbitron',13),
+                                                  fg='white',
+                                                  bg='#3d3d5c',
+                                                  anchor='w')
+        balance_label.pack(fill='x')
+
+        button_frame = tk.Frame(self,bg='#33334d')
+        button_frame.pack(fill='both',expand=True)
+
+        def menu():
+            controller.show_frame('MenuPage')
+            
+        menu_button = tk.Button(button_frame,
+                                                    command=menu,
+                                                    text='Menu',
+                                                    relief='raised',
+                                                    borderwidth=3,
+                                                    width=50,
+                                                    height=5)
+        menu_button.grid(row=0,column=0,pady=5)
+
+        def exit():
+            controller.show_frame('StartPage')
+            
+        exit_button = tk.Button(button_frame,
+                                                 text='Exit',
+                                                 command=exit,
+                                                 relief='raised',
+                                                 borderwidth=3,
+                                                 width=50,
+                                                 height=5)
+        exit_button.grid(row=1,column=0,pady=5)
+
+        bottom_frame = tk.Frame(self,relief='raised',borderwidth=3)
+        bottom_frame.pack(fill='x',side='bottom')
+
+        visa_photo = tk.PhotoImage(file='visa.png')
+        visa_label = tk.Label(bottom_frame,image=visa_photo)
+        visa_label.pack(side='left')
+        visa_label.image = visa_photo
+
+        mastercard_photo = tk.PhotoImage(file='mastercard.png')
+        mastercard_label = tk.Label(bottom_frame,image=mastercard_photo)
+        mastercard_label.pack(side='left')
+        mastercard_label.image = mastercard_photo
+
+        american_express_photo = tk.PhotoImage(file='american-express.png')
+        american_express_label = tk.Label(bottom_frame,image=american_express_photo)
+        american_express_label.pack(side='left')
+        american_express_label.image = american_express_photo
+
+        def tick():
+            current_time = time.strftime('%I:%M %p').lstrip('0').replace(' 0',' ')
+            time_label.config(text=current_time)
+            time_label.after(200,tick)
+            
+        time_label = tk.Label(bottom_frame,font=('orbitron',12))
+        time_label.pack(side='right')
+
+        tick()
+
+
+if __name__ == "__main__":
+    app = SampleApp()
+    app.mainloop()
 
 
